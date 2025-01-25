@@ -4,9 +4,6 @@
   "description": "[![Actions Status](https://github.com/SaXaReD/frontend-project-11/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/SaXaReD/frontend-project-11/actions)\r ### Codeclimate badge\r [![Maintainability](https://api.codeclimate.com/v1/badges/4f77ae4efda1475ab2c2/maintainability)](https://codeclimate.com/github/SaXaReD/frontend-project-11/maintainability)",
   "main": "index.js",
   "scripts": {
-    "install": "npm ci",
-    "build": "NODE_ENV=production npx webpack",
-    "start": "npx webpack serve",
     "lint": "npx eslint ."
   },
   "repository": {
