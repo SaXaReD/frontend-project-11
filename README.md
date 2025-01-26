@@ -5,5 +5,7 @@
 RSS-reader-hexlet
 ## Stack
 * JavaScript
+* i18next
 * Webpack
+* yup
 ### [Deployed on Vercel](https://frontend-project-11-nine-wheat.vercel.app/)
