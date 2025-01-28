@@ -41,9 +41,11 @@
   },
   "dependencies": {
     "@babel/preset-env": "^7.26.7",
+    "axios": "^1.7.9",
     "babel-loader": "^9.2.1",
     "bootstrap": "^5.3.3",
     "i18next": "^24.2.2",
+    "lodash": "^4.17.21",
     "on-change": "^5.0.1",
     "yup": "^1.6.1"
   }

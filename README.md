@@ -7,5 +7,7 @@ RSS-reader-hexlet
 * JavaScript
 * i18next
 * Webpack
-* yup
+* Axios
+* Yup
+* Lodash
 ### [Deployed on Vercel](https://frontend-project-11-nine-wheat.vercel.app/)
