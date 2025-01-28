@@ -10,4 +10,4 @@ RSS-reader-hexlet
 * Axios
 * Yup
 * Lodash
-### [Deployed on Vercel](https://frontend-project-11-nine-wheat.vercel.app/)
+### <a href="https://frontend-project-11-nine-wheat.vercel.app/" target="_blank">Deployed on Vercel</a>
