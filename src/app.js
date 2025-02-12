@@ -16,6 +16,11 @@ export default () => {
     feedbackContainer: document.querySelector('.feedback'),
     postsContainer: document.querySelector('.posts'),
     feedsContainer: document.querySelector('.feeds'),
+    modal: {
+      title: document.querySelector('.modal-title'),
+      body: document.querySelector('.modal-body'),
+      footer: document.querySelector('.modal-footer'),
+    },
     spanSpinner: document.createElement('span'),
     spanLoading: document.createElement('span'),
   };
@@ -28,6 +33,10 @@ export default () => {
     },
     feeds: [],
     posts: [],
+    uiState: {
+      visitedPosts: new Set(),
+      modalId: null,
+    },
   };
 
   const i18n = i18next.createInstance();
@@ -43,10 +52,11 @@ export default () => {
 
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
+    watchedState.rssForm.state = 'filling';
     const formData = new FormData(e.target);
     const url = formData.get('url');
     const urlsList = watchedState.feeds.map((feed) => feed.url);
-    validateUrl(url, urlsList)
+    validateUrl(url, urlsList, i18n)
       .then((validUrl) => {
         watchedState.rssForm.error = null;
         watchedState.rssForm.state = 'processing';
@@ -57,20 +67,32 @@ export default () => {
         const newFeed = { ...feed, id: _.uniqueId(), url };
         const newPosts = posts.map((post) => ({ ...post, id: _.uniqueId(), feedId: newFeed.id }));
         watchedState.feeds = [newFeed, ...watchedState.feeds];
-        newPosts.forEach((post) => watchedState.posts.push(post));
+        watchedState.posts = [...newPosts, ...watchedState.posts];
         watchedState.rssForm.state = 'success';
       })
       .catch((err) => {
         watchedState.rssForm.valid = err.name !== 'ValidationError';
         if (err.name === 'ValidationError') {
           watchedState.rssForm.error = err.message;
-        } else if (err.invalidRss) {
-          watchedState.rssForm.error = 'form.errors.invalidRss';
+        } else if (err.NotValidRss) {
+          watchedState.rssForm.error = 'form.errors.notValidRss';
         } else if (axios.isAxiosError(err)) {
           watchedState.rssForm.error = 'form.errors.networkProblems';
         }
         watchedState.rssForm.state = 'filling';
       });
+  });
+
+  elements.postsContainer.addEventListener('click', ({ target }) => {
+    if (target.closest('a')) {
+      const { id } = target.dataset;
+      watchedState.uiState.visitedPosts.add(id);
+    }
+    if (target.closest('button')) {
+      const { id } = target.dataset;
+      watchedState.uiState.visitedPosts.add(id);
+      watchedState.uiState.modalId = id;
+    }
   });
 
   setTimeout(() => updatePosts(watchedState), 5000);

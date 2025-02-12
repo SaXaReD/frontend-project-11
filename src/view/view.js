@@ -1,6 +1,8 @@
 /* eslint-disable no-param-reassign */
 import onChange from 'on-change';
 import renderStatus from './renderStatus.js';
+import renderModal from './renderModal.js';
+import renderVisitedLinks from './renderVisitedLinks.js';
 
 const renderFeeds = (state, elements, i18n) => {
   elements.feedsContainer.innerHTML = '';
@@ -59,11 +61,12 @@ const renderPosts = (state, elements, i18n) => {
   const ulEl = document.createElement('ul');
   ulEl.classList.add('list-group', 'border-0', 'rounded-0');
   state.posts.forEach(({ id, title, link }) => {
+    const classes = state.uiState.visitedPosts.has(id) ? 'fw-normal link-secondary' : 'fw-bold';
     const liEl = document.createElement('li');
     liEl.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
 
     const aEl = document.createElement('a');
-    aEl.setAttribute('class', 'fw-bold');
+    aEl.setAttribute('class', classes);
     aEl.setAttribute('href', link);
     aEl.dataset.id = id;
     aEl.setAttribute('target', '_blank');
@@ -100,6 +103,12 @@ const renderError = (error, elements, i18n) => {
 
 export default (state, elements, i18n) => onChange(state, (path, value) => {
   switch (path) {
+    case 'uiState.modalId':
+      renderModal(elements, state.posts, value);
+      break;
+    case 'uiState.visitedPosts':
+      renderVisitedLinks(value, state.posts);
+      break;
     case 'feeds':
       renderFeeds(state, elements, i18n);
       break;
