@@ -8,7 +8,7 @@
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
-    "serve": "webpack serve"
+    "serve": "webpack serve --mode=development"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,8 @@
   "homepage": "https://github.com/SaXaReD/frontend-project-11#readme",
   "devDependencies": {
     "@eslint/js": "^9.19.0",
+    "@playwright/test": "^1.50.1",
+    "@types/node": "^22.13.1",
     "css-loader": "^7.1.2",
     "eslint": "^8.57.1",
     "eslint-config-airbnb-base": "^15.0.0",

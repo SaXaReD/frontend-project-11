@@ -74,8 +74,8 @@ export default () => {
         watchedState.rssForm.valid = err.name !== 'ValidationError';
         if (err.name === 'ValidationError') {
           watchedState.rssForm.error = err.message;
-        } else if (err.NotValidRss) {
-          watchedState.rssForm.error = 'form.errors.notValidRss';
+        } else if (err.invalidRss) {
+          watchedState.rssForm.error = 'form.errors.invalidRss';
         } else if (axios.isAxiosError(err)) {
           watchedState.rssForm.error = 'form.errors.networkProblems';
         }
