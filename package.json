@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "[![Actions Status](https://github.com/SaXaReD/frontend-project-11/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/SaXaReD/frontend-project-11/actions)\r ### Codeclimate badge\r [![Maintainability](https://api.codeclimate.com/v1/badges/4f77ae4efda1475ab2c2/maintainability)](https://codeclimate.com/github/SaXaReD/frontend-project-11/maintainability)",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "build": "webpack --mode=production --node-env=production",
     "build:dev": "webpack --mode=development",
