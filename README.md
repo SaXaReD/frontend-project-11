@@ -9,5 +9,34 @@ RSS-reader-hexlet
 * Webpack
 * Axios
 * Yup
-* Lodash
+## Install
+### Production
+1. Copy repository on device
+    ```shell
+    git clone https://github.com/SaXaReD/frontend-project-11.git
+    ```
+2. Install dependencies
+    ```shell
+    npm install
+    ```
+3. Create build
+   ```shell
+   npm run build
+   ```
+4. Deploy
+
+   Copy files from folder (./dist) and place to your server
+### Development
+1. Copy repository on device
+    ```shell
+    git clone https://github.com/SaXaReD/frontend-project-11.git
+    ```
+2. Install dependencies
+   ```shell
+   npm install
+   ```
+3. Start local server
+   ```shell
+   npm run dev
+   ```
 ### <a href="https://frontend-project-11-nine-wheat.vercel.app/" target="_blank">Deployed on Vercel</a>

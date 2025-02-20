@@ -1,10 +1,19 @@
 /* eslint-disable no-param-reassign */
+import i18next from 'i18next';
 import onChange from 'on-change';
 import renderStatus from './renderStatus.js';
 import renderModal from './renderModal.js';
 import renderVisitedLinks from './renderVisitedLinks.js';
+import resources from '../locales/index.js';
 
-const renderFeeds = (state, elements, i18n) => {
+const i18n = i18next.createInstance();
+i18n.init({
+  lng: 'ru',
+  debug: true,
+  resources,
+});
+
+const renderFeeds = (state, elements) => {
   elements.feedsContainer.innerHTML = '';
 
   const divEl = document.createElement('div');
@@ -43,7 +52,7 @@ const renderFeeds = (state, elements, i18n) => {
   divEl.append(ulEl);
 };
 
-const renderPosts = (state, elements, i18n) => {
+const renderPosts = (state, elements) => {
   elements.postsContainer.innerHTML = '';
   const divEl = document.createElement('div');
   divEl.classList.add('card', 'border-0');
@@ -61,7 +70,7 @@ const renderPosts = (state, elements, i18n) => {
   const ulEl = document.createElement('ul');
   ulEl.classList.add('list-group', 'border-0', 'rounded-0');
   state.posts.forEach(({ id, title, link }) => {
-    const classes = state.uiState.visitedPosts.has(id) ? 'fw-normal link-secondary' : 'fw-bold';
+    const classes = state.uiStatus.visitedPosts.has(id) ? 'fw-normal link-secondary' : 'fw-bold';
     const liEl = document.createElement('li');
     liEl.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
 
@@ -88,7 +97,7 @@ const renderPosts = (state, elements, i18n) => {
   divEl.append(ulEl);
 };
 
-const renderError = (error, elements, i18n) => {
+const renderError = (error, elements) => {
   elements.feedbackContainer.textContent = '';
   if (error) {
     elements.input.readOnly = false;
@@ -101,12 +110,12 @@ const renderError = (error, elements, i18n) => {
   }
 };
 
-export default (state, elements, i18n) => onChange(state, (path, value) => {
+export default (state, elements) => onChange(state, (path, value) => {
   switch (path) {
-    case 'uiState.modalId':
+    case 'uiStatus.modalId':
       renderModal(elements, state.posts, value);
       break;
-    case 'uiState.visitedPosts':
+    case 'uiStatus.visitedPosts':
       renderVisitedLinks(value, state.posts);
       break;
     case 'feeds':
@@ -118,14 +127,17 @@ export default (state, elements, i18n) => onChange(state, (path, value) => {
     case 'rssForm.error':
       renderError(value, elements, i18n);
       break;
-    case 'rssForm.valid':
+    case 'loadingStatus.error':
+      renderError(value, elements, i18n);
+      break;
+    case 'rssForm.isValid':
       if (!value) {
         elements.input.classList.add('is-invalid');
         return;
       }
       elements.input.classList.remove('is-invalid');
       break;
-    case 'rssForm.state':
+    case 'loadingStatus.state':
       renderStatus(value, elements, i18n);
       break;
     default:

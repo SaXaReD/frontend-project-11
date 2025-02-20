@@ -1,15 +1,15 @@
 {
   "name": "@hexlet/code",
   "version": "1.0.0",
-  "description": "[![Actions Status](https://github.com/SaXaReD/frontend-project-11/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/SaXaReD/frontend-project-11/actions)\r ### Codeclimate badge\r [![Maintainability](https://api.codeclimate.com/v1/badges/4f77ae4efda1475ab2c2/maintainability)](https://codeclimate.com/github/SaXaReD/frontend-project-11/maintainability)",
+  "description": "Hexlet trird project 'RSS aggregator'",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "build": "webpack --mode=production --node-env=production",
     "build:dev": "webpack --mode=development",
-    "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
-    "serve": "webpack serve --mode=development"
+    "dev": "webpack serve --mode=development",
+    "test": "npx playwright test --ui"
   },
   "repository": {
     "type": "git",
@@ -40,12 +40,12 @@
     "style-loader": "^4.0.0",
     "webpack": "^5.97.1",
     "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.2.0"
+    "webpack-dev-server": "^5.2.0",
+    "@babel/preset-env": "^7.26.7",
+    "babel-loader": "^9.2.1"
   },
   "dependencies": {
-    "@babel/preset-env": "^7.26.7",
     "axios": "^1.7.9",
-    "babel-loader": "^9.2.1",
     "bootstrap": "^5.3.3",
     "i18next": "^24.2.2",
     "lodash": "^4.17.21",

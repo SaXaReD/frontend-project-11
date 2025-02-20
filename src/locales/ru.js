@@ -8,6 +8,7 @@ export default {
         required: 'Не должно быть пустым',
         invalidRss: 'Ресурс не содержит валидный RSS',
         networkProblems: 'Ошибка сети',
+        unknownError: 'Неизвестная ошибка',
       },
     },
     feeds: {

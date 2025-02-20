@@ -3,8 +3,8 @@ import { test, expect } from '@playwright/test';
 
 test('Success', async ({ page }) => {
   await page.goto('http://localhost:8080/');
-  await page.fill('input', 'https://aljazeera.com/xml/rss/all.xml');
-  await page.locator('button[type="submit"]').click();
+  await page.fill('#url-input', 'https://aljazeera.com/xml/rss/all.xml');
+  await page.locator('#url-submit').click();
 
   const feedback = page.locator('.feedback');
   await expect(feedback).toHaveText('RSS успешно загружен');
@@ -12,8 +12,8 @@ test('Success', async ({ page }) => {
 
 test('Show modal post', async ({ page }) => {
   await page.goto('http://localhost:8080/');
-  await page.fill('input', 'https://aljazeera.com/xml/rss/all.xml');
-  await page.locator('button[type="submit"]').click();
+  await page.fill('#url-input', 'https://aljazeera.com/xml/rss/all.xml');
+  await page.locator('#url-submit').click();
 
   await page.waitForSelector('.feedback:has-text("RSS успешно загружен")');
 
@@ -23,13 +23,13 @@ test('Show modal post', async ({ page }) => {
 
 test('Has URL', async ({ page }) => {
   await page.goto('http://localhost:8080/');
-  await page.fill('input', 'https://aljazeera.com/xml/rss/all.xml');
-  await page.locator('button[type="submit"]').click();
+  await page.fill('#url-input', 'https://aljazeera.com/xml/rss/all.xml');
+  await page.locator('#url-submit').click();
 
   await page.waitForSelector('.feedback:has-text("RSS успешно загружен")');
 
-  await page.fill('input', 'https://aljazeera.com/xml/rss/all.xml');
-  await page.locator('button[type="submit"]').click();
+  await page.fill('#url-input', 'https://aljazeera.com/xml/rss/all.xml');
+  await page.locator('#url-submit').click();
 
   const feedback = page.locator('.feedback');
   await expect(feedback).toHaveText('RSS уже существует');
@@ -37,7 +37,7 @@ test('Has URL', async ({ page }) => {
 
 test('Not be empty', async ({ page }) => {
   await page.goto('http://localhost:8080/');
-  await page.locator('button[type="submit"]').click();
+  await page.locator('#url-submit').click();
 
   const feedback = page.locator('.feedback');
   await expect(feedback).toHaveText('Не должно быть пустым');
@@ -45,8 +45,8 @@ test('Not be empty', async ({ page }) => {
 
 test('Not valid URL', async ({ page }) => {
   await page.goto('http://localhost:8080/');
-  await page.fill('input', 'notLink');
-  await page.locator('button[type="submit"]').click();
+  await page.fill('#url-input', 'notLink');
+  await page.locator('#url-submit').click();
 
   const feedback = page.locator('.feedback');
   await expect(feedback).toHaveText('Ссылка должна быть валидным URL');
@@ -54,8 +54,8 @@ test('Not valid URL', async ({ page }) => {
 
 test('Not valid RSS', async ({ page }) => {
   await page.goto('http://localhost:8080/');
-  await page.fill('input', 'https://aljazeera.com/xml/rss/all.xm');
-  await page.locator('button[type="submit"]').click();
+  await page.fill('#url-input', 'https://aljazeera.com/xml/rss/all.xm');
+  await page.locator('#url-submit').click();
 
   const feedback = page.locator('.feedback');
   await expect(feedback).toHaveText('Ресурс не содержит валидный RSS');
@@ -68,8 +68,8 @@ test('Network error', async ({ page }) => {
     route.abort('failed');
   });
 
-  await page.fill('input', 'https://aljazeera.com/xml/rss/all.xml');
-  await page.locator('button[type="submit"]').click();
+  await page.fill('#url-input', 'https://aljazeera.com/xml/rss/all.xml');
+  await page.locator('#url-submit').click();
 
   const feedback = page.locator('.feedback');
   await expect(feedback).toHaveText('Ошибка сети');

@@ -2,9 +2,7 @@ export default (data) => {
   const parsedXml = new DOMParser().parseFromString(data, 'application/xml');
   const parseError = parsedXml.querySelector('parsererror');
   if (parseError) {
-    const textError = parseError.textContent;
-    const error = new Error(textError);
-    error.invalidRss = true;
+    const error = new Error('form.errors.invalidRss');
     throw error;
   }
 
