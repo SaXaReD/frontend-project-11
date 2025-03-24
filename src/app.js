@@ -28,7 +28,7 @@ export default () => {
       error: null,
     },
     loadingStatus: {
-      state: 'filling',
+      state: '',
       error: null,
     },
     feeds: [],
@@ -41,17 +41,17 @@ export default () => {
 
   const watchedState = initView(initialState, elements);
 
-  const validateUrl = (url, urlList) => {
-    yup.setLocale({
-      mixed: {
-        required: 'form.errors.required',
-        notOneOf: 'form.errors.existingUrl',
-      },
-      string: {
-        url: 'form.errors.invalidUrl',
-      },
-    });
+  yup.setLocale({
+    mixed: {
+      required: 'form.errors.required',
+      notOneOf: 'form.errors.existingUrl',
+    },
+    string: {
+      url: 'form.errors.invalidUrl',
+    },
+  });
 
+  const validateUrl = (url, urlList) => {
     const schema = yup
       .string()
       .required()
@@ -80,54 +80,47 @@ export default () => {
       .finally(() => setTimeout(() => updatePosts(watchedState), 10000));
   };
 
-  const resetFormState = () => {
+  const fetchAndProcessFeed = (url) => {
+    watchedState.loadingStatus.state = 'processing';
     watchedState.loadingStatus.error = null;
-    watchedState.rssForm.error = null;
-    watchedState.rssForm.isValid = true;
-    elements.input.classList.remove('is-invalid');
-  };
+    fetchData(url)
+      .then(({ data }) => {
+        const [feed, posts] = getFeedAndPosts(data.contents);
+        const newFeed = { ...feed, id: _.uniqueId(), url };
+        const newPosts = posts.map((post) => ({ ...post, id: _.uniqueId(), feedId: newFeed.id }));
 
-  const fetchAndProcessFeed = async (url) => {
-    try {
-      const { data } = await fetchData(url);
-      const [feed, posts] = getFeedAndPosts(data.contents);
-      const newFeed = { ...feed, id: _.uniqueId(), url };
-      const newPosts = posts.map((post) => ({ ...post, id: _.uniqueId(), feedId: newFeed.id }));
-      watchedState.feeds = [newFeed, ...watchedState.feeds];
-      watchedState.posts = [...newPosts, ...watchedState.posts];
-      watchedState.loadingStatus.state = 'success';
-    } catch (err) {
-      if (axios.isAxiosError(err)) {
-        watchedState.loadingStatus.error = 'form.errors.networkProblems';
-      } else if (err.message === 'form.errors.invalidRss') {
-        watchedState.rssForm.error = err.message;
-      } else {
-        watchedState.rssForm.error = 'form.errors.unknownError';
-      }
-    }
+        watchedState.feeds = [newFeed, ...watchedState.feeds];
+        watchedState.posts = [...newPosts, ...watchedState.posts];
+        watchedState.loadingStatus.state = 'success';
+      })
+      .catch((err) => {
+        if (axios.isAxiosError(err)) {
+          watchedState.loadingStatus.error = 'form.errors.networkProblems';
+        } else if (err === 'form.errors.invalidRss') {
+          watchedState.rssForm.error = 'form.errors.invalidRss';
+        } else {
+          watchedState.rssForm.error = 'form.errors.unknownError';
+        }
+        watchedState.loadingStatus.state = 'failed';
+      });
   };
 
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
-    resetFormState();
-    watchedState.loadingStatus.state = 'filling';
+    watchedState.rssForm.isValid = true;
+    watchedState.rssForm.error = null;
     const formData = new FormData(e.target);
     const url = formData.get('url');
     const urls = watchedState.feeds.map((feed) => feed.url);
-    setTimeout(() => {
-      validateUrl(url, urls)
-        .then((err) => {
-          if (err) {
-            watchedState.rssForm.isValid = false;
-            watchedState.rssForm.error = err;
-            watchedState.loadingStatus.state = 'filling';
-            return;
-          }
-          watchedState.rssForm.error = null;
-          watchedState.loadingStatus.state = 'processing';
-          fetchAndProcessFeed(url);
-        });
-    }, 500);
+    validateUrl(url, urls)
+      .then((err) => {
+        if (err) {
+          watchedState.rssForm.isValid = false;
+          watchedState.rssForm.error = err;
+          return;
+        }
+        fetchAndProcessFeed(url);
+      });
   });
 
   elements.postsContainer.addEventListener('click', ({ target }) => {

@@ -1,9 +1,20 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import path from 'path';
 
 export default {
   mode: process.env.NODE_ENV || 'development',
+  entry: ['./src/index.js', 'bootstrap/dist/css/bootstrap.min.css'],
   module: {
     rules: [
+      {
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
+      },
+      {
+        test: /\.scss$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+      },
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -14,18 +25,19 @@ export default {
           },
         },
       },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'sass-loader', 'postcss-loader'],
-      },
     ],
   },
   plugins: [
+    new MiniCssExtractPlugin({
+      filename: 'styles.css',
+    }),
     new HtmlWebpackPlugin({
       template: 'index.html',
     }),
   ],
   output: {
+    path: path.resolve('dist'),
+    filename: 'bundle.js',
     clean: true,
   },
 };

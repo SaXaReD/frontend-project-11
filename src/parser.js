@@ -3,7 +3,7 @@ export default (data) => {
   const parseError = parsedXml.querySelector('parsererror');
   if (parseError) {
     const error = new Error('form.errors.invalidRss');
-    throw error;
+    throw error.message;
   }
 
   const feed = {

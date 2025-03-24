@@ -1,16 +1,16 @@
 /* eslint-disable no-param-reassign */
-import i18next from 'i18next';
 import onChange from 'on-change';
+import { initI18n } from '../utils/init.js';
 import renderStatus from './renderStatus.js';
 import renderModal from './renderModal.js';
 import renderVisitedLinks from './renderVisitedLinks.js';
-import resources from '../locales/index.js';
 
-const i18n = i18next.createInstance();
-i18n.init({
-  lng: 'ru',
-  debug: true,
-  resources,
+let i18n;
+
+initI18n().then((initializedI18n) => {
+  i18n = initializedI18n;
+}).catch((error) => {
+  console.error('Error during i18n initialization:', error);
 });
 
 const renderFeeds = (state, elements) => {
