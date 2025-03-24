@@ -4,7 +4,11 @@ import path from 'path';
 
 export default {
   mode: process.env.NODE_ENV || 'development',
-  entry: ['./src/index.js', 'bootstrap/dist/css/bootstrap.min.css'],
+  entry: [
+    './src/index.js',
+    'bootstrap/dist/css/bootstrap.css',
+    'bootstrap/dist/js/bootstrap.bundle.min.js',
+  ],
   module: {
     rules: [
       {
